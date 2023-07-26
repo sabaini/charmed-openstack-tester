@@ -1,5 +1,5 @@
 variables:
-  source: &source cloud:jammy-zed/proposed
+  source: &source proposed
   openstack-origin: &openstack-origin cloud:jammy-zed/proposed
   retrofit-uca-pocket: &retrofit-uca-pocket zed
   openstack-channel: &openstack-channel zed/edge

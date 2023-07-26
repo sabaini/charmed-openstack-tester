@@ -1,5 +1,5 @@
 variables:
-  source: &source cloud:focal-wallaby/proposed
+  source: &source proposed
   openstack-origin: &openstack-origin cloud:focal-wallaby/proposed
   retrofit-uca-pocket: &retrofit-uca-pocket wallaby
   openstack-channel: &openstack-channel wallaby/edge

@@ -1,5 +1,5 @@
 variables:
-  source: &source cloud:focal-yoga/proposed
+  source: &source proposed
   openstack-origin: &openstack-origin cloud:focal-yoga/proposed
   retrofit-uca-pocket: &retrofit-uca-pocket yoga
   openstack-channel: &openstack-channel yoga/edge

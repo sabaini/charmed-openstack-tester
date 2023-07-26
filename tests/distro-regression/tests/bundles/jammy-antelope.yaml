@@ -1,5 +1,5 @@
 variables:
-  source: &source cloud:jammy-antelope/proposed
+  source: &source proposed
   openstack-origin: &openstack-origin cloud:jammy-antelope/proposed
   retrofit-uca-pocket: &retrofit-uca-pocket antelope
   openstack-channel: &openstack-channel 2023.1/edge

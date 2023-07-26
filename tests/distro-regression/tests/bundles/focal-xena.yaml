@@ -1,5 +1,5 @@
 variables:
-  source: &source cloud:focal-xena/proposed
+  source: &source proposed
   openstack-origin: &openstack-origin cloud:focal-xena/proposed
   retrofit-uca-pocket: &retrofit-uca-pocket xena
   openstack-channel: &openstack-channel xena/edge
