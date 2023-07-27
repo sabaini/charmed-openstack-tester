@@ -1,31 +1,33 @@
 smoke_bundles:
-  - xenial_queens: xenial-queens
-  - xenial_queens: bionic-queens
-  - bionic_ussuri: bionic-ussuri
-  - focal_ussuri: focal-ussuri
-  - focal_ussuri: focal-ussuri-ovn-22.03
-  - focal_ussuri: focal-victoria
-  - focal_wallaby: focal-wallaby
-  - focal_wallaby: focal-xena
-  - focal_wallaby: focal-yoga
-  - focal_wallaby: jammy-yoga
-  - focal_wallaby: jammy-zed
-  - focal_wallaby: jammy-antelope
-  - focal_wallaby: jammy-bobcat
-  - focal_wallaby: jammy-caracal
-  - focal_wallaby: lunar-antelope
-  - focal_wallaby: mantic-bobcat
-  - focal_wallaby: noble-caracal
-  - bionic_queens_security: bionic-queens-security
-  - focal_ussuri_security: focal-ussuri-security
-  - focal_ussuri_security: jammy-yoga-security
-  - focal_ussuri_security: lunar-antelope-security
-  - focal_ussuri_security: mantic-bobcat-security
-  - focal_ussuri_security: noble-caracal-security
-  - focal_upgrades: focal-ussuri-to-yoga-upgrades
-  - jammy_upgrades: jammy-yoga-to-caracal-upgrades
+  - keystone_v3_smoke: bionic-queens
+  - keystone_v3_smoke_rocky: bionic-rocky
+  - keystone_v3_smoke_stein: bionic-stein
+  - keystone_v3_smoke_stein: bionic-train
+  - keystone_v3_smoke_stein: bionic-ussuri
+  - keystone_v3_smoke_focal: focal-ussuri
+  - keystone_v3_smoke_focal: focal-victoria
+  - keystone_v3_smoke_focal: focal-wallaby
+  - keystone_v3_smoke_focal: focal-xena
+  - keystone_v3_smoke_focal: focal-yoga
+  - keystone_v3_smoke_focal: jammy-yoga
+  - keystone_v3_smoke_focal: jammy-zed
+  - keystone_v3_smoke_focal: jammy-antelope
+  - keystone_v3_smoke_focal: jammy-bobcat
+  - keystone_v3_smoke_focal: kinetic-zed
+  - keystone_v3_smoke_focal: lunar-antelope
+  - keystone_v3_smoke_focal: mantic-bobcat
+  - keystone_v3_smoke_focal_magnum: focal-ussuri-magnum
+  - keystone_v3_smoke_focal_magnum: focal-victoria-magnum
+  - keystone_v3_smoke_focal_magnum: focal-wallaby-magnum
+  - keystone_v3_smoke_focal_magnum: focal-xena-magnum
+  - keystone_v3_smoke_focal_magnum: focal-yoga-magnum
+  - keystone_v3_smoke_focal_magnum: jammy-yoga-magnum
+  - keystone_v3_smoke_focal_magnum: jammy-zed-magnum
+  - keystone_v3_smoke_focal_magnum: jammy-antelope-magnum
+  - keystone_v3_smoke_focal_magnum: kinetic-zed-magnum
+  - keystone_v3_smoke_focal_magnum: lunar-antelope-magnum
 configure:
-  - xenial_queens: &xenial_queens
+  - keystone_v2_smoke: &configure_queens_and_older
     - zaza.openstack.charm_tests.ceilometer.setup.basic_setup
     - zaza.openstack.charm_tests.glance.setup.add_lts_image
     - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
@@ -35,8 +37,8 @@ configure:
     - zaza.openstack.charm_tests.keystone.setup.add_tempest_roles
     - zaza.openstack.charm_tests.glance.setup.add_cirros_image
     - zaza.openstack.charm_tests.glance.setup.add_cirros_alt_image
-  - bionic_queens_security: *xenial_queens
-  - bionic_ussuri:
+  - keystone_v3_smoke: *configure_queens_and_older
+  - keystone_v3_smoke_rocky: &configure_rocky_to_ussuri_without_vault
     - zaza.openstack.charm_tests.ceilometer.setup.basic_setup
     - zaza.openstack.charm_tests.glance_simplestreams_sync.setup.sync_images
     - zaza.openstack.charm_tests.glance.setup.add_lts_image
@@ -51,7 +53,8 @@ configure:
     - zaza.openstack.charm_tests.glance.setup.add_cirros_image
     - zaza.openstack.charm_tests.glance.setup.add_cirros_alt_image
     - zaza.openstack.charm_tests.octavia.setup.centralized_fip_network
-  - focal_ussuri: &focal_ussuri
+  - keystone_v3_smoke_stein: *configure_rocky_to_ussuri_without_vault
+  - keystone_v3_smoke_focal:
     - zaza.openstack.charm_tests.vault.setup.auto_initialize
     - zaza.openstack.charm_tests.ceilometer.setup.basic_setup
     - zaza.openstack.charm_tests.glance_simplestreams_sync.setup.sync_images
@@ -67,85 +70,62 @@ configure:
     - zaza.openstack.charm_tests.glance.setup.add_cirros_image
     - zaza.openstack.charm_tests.glance.setup.add_cirros_alt_image
     - zaza.openstack.charm_tests.octavia.setup.centralized_fip_network
+  - keystone_v3_smoke_focal_magnum:
+    - zaza.openstack.charm_tests.vault.setup.auto_initialize
+    - zaza.openstack.charm_tests.glance_simplestreams_sync.setup.sync_images
+    - zaza.openstack.charm_tests.glance.setup.add_lts_image
+    - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
+    - zaza.openstack.charm_tests.nova.setup.create_flavors
+    - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
+    - zaza.openstack.charm_tests.keystone.setup.add_demo_user
+    - zaza.openstack.charm_tests.keystone.setup.add_tempest_roles
+    - zaza.openstack.charm_tests.glance.setup.add_cirros_image
+    - zaza.openstack.charm_tests.glance.setup.add_cirros_alt_image
+    - zaza.openstack.charm_tests.heat.setup.domain_setup
     - zaza.openstack.charm_tests.magnum.setup.domain_setup
     - zaza.openstack.charm_tests.magnum.setup.add_image
-  - focal_ussuri_security: *focal_ussuri
-  - focal_upgrades: *focal_ussuri
-  - focal_wallaby: *focal_ussuri
-  - jammy_upgrades: *focal_ussuri
 tests:
-  - xenial_queens: &xenial_queens_tests
-    - zaza.openstack.charm_tests.status.tests.ProposedPackageReport
+  - keystone_v2_smoke:
+    - zaza.openstack.charm_tests.tempest.tests.TempestTestWithKeystoneV2
+  - keystone_v3_smoke:
     - zaza.openstack.charm_tests.tempest.tests.TempestTestWithKeystoneV3
-  - bionic_queens_security: *xenial_queens_tests
-  - bionic_ussuri: *xenial_queens_tests
-  - focal_ussuri: *xenial_queens_tests
-  - focal_ussuri_security: *xenial_queens_tests
-  - focal_wallaby: *xenial_queens_tests
-  - focal_upgrades:
-    # ussuri->victoria
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
-    # victoria->wallaby
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
-    # wallaby->xena
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
-    # xena->yoga
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
+  - keystone_v3_smoke_rocky:
     - zaza.openstack.charm_tests.tempest.tests.TempestTestWithKeystoneV3
-  - jammy_upgrades:
-    # yoga->zed
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
-    # zed->antelope
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
-    # antelope->bobcat
-    - zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    - zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
-    # bobcat->caracal
-    # Note(coreycb): Consider skip level upgrade from antelope->caracal.
-    #- zaza.openstack.charm_tests.charm_upgrade.tests.FullCloudCharmUpgradeTest
-    #- zaza.openstack.charm_tests.openstack_upgrade.tests.OpenStackUpgradeTestsByOption
+  - keystone_v3_smoke_stein:
+    - zaza.openstack.charm_tests.tempest.tests.TempestTestWithKeystoneV3
+  - keystone_v3_smoke_focal:
+    - zaza.openstack.charm_tests.tempest.tests.TempestTestWithKeystoneV3
+  - keystone_v3_smoke_focal_magnum:
     - zaza.openstack.charm_tests.tempest.tests.TempestTestWithKeystoneV3
 tests_options:
-  bionic_queens_security:
-    overlay_ppas:
-      - ppa:ubuntu-security-proposed/ppa
-  focal_ussuri_security:
-    overlay_ppas:
-      - ppa:ubuntu-security-proposed/ppa
-  openstack-upgrade:
-    detect-using-charm: keystone
   tempest:
-    xenial_queens:
+    keystone_v2_smoke:
       smoke: True
-      serial: False
-      include-list: &xenial_queens_include_list
-        - "heat_tempest_plugin.tests.api.*"
-        - "heat_tempest_plugin.tests.functional.*"
-      exclude-list: &exclude_list
-        # designate tests fail with self.creds_client.assign_user_role_on_system 'No "reader" role found'
-        - "designate_tempest_plugin.tests.api.v2.test_zones_exports.ZonesExportTest"
-        - "designate_tempest_plugin.tests.api.v2.test_zones_imports.ZonesImportTest"
-        # HTTP 401 unauthorized
-        - "heat_tempest_plugin.tests.functional.test_create_update_neutron_port.UpdatePortTest.test_update_with_mac_address"
-        - "heat_tempest_plugin.tests.functional.test_encryption_vol_type.EncryptionVolTypeTest.test_create_update"
-        # Need fixed demo network defined (ie. fixed_network_name=demo_project_network)
-        - "heat_tempest_plugin.tests.functional.test_encrypted_parameter.EncryptedParametersTest.test_db_encryption"
-        - "heat_tempest_plugin.tests.functional.test_lbaasv2.LoadBalancerv2Test.test_add_delete_poolmember"
-        - "heat_tempest_plugin.tests.functional.test_lbaasv2.LoadBalancerv2Test.test_create_update_loadbalancer"
-        - "heat_tempest_plugin.tests.functional.test_os_wait_condition.OSWaitCondition.test_create_stack_with_multi_signal_waitcondition"
-        - "heat_tempest_plugin.tests.functional.test_software_config.ParallelDeploymentsTest.test_deployments_metadata"
-        - "heat_tempest_plugin.tests.functional.test_software_config.ParallelDeploymentsTest.test_deployments_timeout_failed"
-        # testtools.matchers._impl.MismatchError: 'CREATE_FAILED' not in ['CREATE_IN_PROGRESS', 'CREATE_COMPLETE']
-        - "heat_tempest_plugin.tests.functional.test_stack_events.StackEventsTest.test_event"
-        # Exclude the known failures due to issues with octavia/manila policy
+    keystone_v3_smoke:
+      smoke: True
+    keystone_v3_smoke_rocky:
+      smoke: True
+      exclude-list:
+        - "tempest.api.identity.v3.test_domains.DefaultDomainTestJSON.test_default_domain_exists"
+    keystone_v3_smoke_stein:
+      smoke: True
+    keystone_v3_smoke_focal:
+      smoke: True
+      exclude-list:
+        - "tempest.api.network.*"
+        - "tempest.scenario.test_network_basic_ops.*"
+        - "tempest.api.compute.servers.test_server_actions.*"
         - "manila_tempest_tests.tests.api.admin.test_share_networks.ShareNetworkAdminTest"
         - "manila_tempest_tests.tests.api.test_share_networks.ShareNetworksTest"
+        - "octavia_tempest_plugin.tests.scenario.v2.test_traffic_ops.TrafficOperationsScenarioTest"
+    keystone_v3_smoke_focal_magnum:
+      smoke: True
+      include-list:
+        - "magnum_tempest_plugin.tests.api.v1.test_cluster"
+        - "magnum_tempest_plugin.tests.api.v1.test_cluster_template"
+        - "magnum_tempest_plugin.tests.api.v1.test_cluster_template_admin"
+        - "magnum_tempest_plugin.tests.api.v1.test_magnum_service"
+      exclude-list:
         # Implemented on container-infra 1.10 which is available in >=Xena
         # https://opendev.org/openstack/magnum/commit/0e6d17893
         # https://opendev.org/openstack/magnum-tempest-plugin/commit/b68a678f37de0a769e7ee8dbefa9bdfe6cf445cc
@@ -154,73 +134,16 @@ tests_options:
         # The test expects a 400 error while the server returns a 401 error due to glance
         # See logs at https://pastebin.ubuntu.com/p/V3DMcVmtyF/
         - "magnum_tempest_plugin.tests.api.v1.test_cluster.ClusterTest.test_create_cluster_with_nonexisting_flavor"
-        # "Percona-XtraDB-Cluster doesn't recommend using SERIALIZABLE isolation with pxc_strict_mode = ENFORCING
-        - "octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest"
-        # 503 is not the expected code 200: https://bugs.launchpad.net/snap-octavia-diskimage-retrofit/+bug/2027585
-        - "octavia_tempest_plugin.tests.scenario.v2.test_traffic_ops.TrafficOperationsScenarioTest.test_prometheus_listener_metrics_page"
-        # Note(coreycb): Disable watcher tests until all the failures can be debugged.
-        - "watcher_tempest_plugin.*"
-    bionic_queens_security:
-      smoke: True
-      serial: False
-      include-list: *xenial_queens_include_list
-      exclude-list: *exclude_list
-    bionic_ussuri:
-      smoke: True
-      serial: False
-      include-list:
-        - "heat_tempest_plugin.tests.api.*"
-        - "heat_tempest_plugin.tests.functional.*"
-        - "octavia_tempest_plugin.tests.scenario.*"
-      exclude-list: *exclude_list
-    focal_ussuri:
-      smoke: True
-      serial: False
-      include-list: &focal_ussuri_include_list
-        - "heat_tempest_plugin.tests.api.*"
-        - "heat_tempest_plugin.tests.functional.*"
-        - "manila_tempest_tests.tests.api.admin.test_admin_actions.AdminActionsTest.*"
-        - "manila_tempest_tests.tests.api.admin.test_share_instances.ShareInstancesTest.*"
-        - "manila_tempest_tests.tests.api.admin.test_share_snapshot_instances.ShareSnapshotInstancesTest.*"
-        - "manila_tempest_tests.tests.api.admin.test_share_types.ShareTypesAdminTest.*"
-        - "manila_tempest_tests.tests.api.admin.test_shares_actions.SharesActionsAdminTest.*"
-        - "magnum_tempest_plugin.tests.api.v1.test_cluster"
-        - "magnum_tempest_plugin.tests.api.v1.test_cluster_template"
-        - "magnum_tempest_plugin.tests.api.v1.test_cluster_template_admin"
-        - "magnum_tempest_plugin.tests.api.v1.test_magnum_service"
-        - "octavia_tempest_plugin.tests.scenario.*"
-        # Note(coreycb): Disable watcher tests until all the failures can be debugged.
-        # - "watcher_tempest_plugin.tests.api"
-        # - "watcher_tempest_plugin.tests.scenario.test_execute_host_maintenance"
-        # - "watcher_tempest_plugin.tests.scenario.test_execute_vm_workload_consolidation"
-      exclude-list: *exclude_list
-    focal_ussuri_security:
-      smoke: True
-      serial: False
-      include-list: *focal_ussuri_include_list
-      exclude-list: *exclude_list
-    focal_upgrades:
-      smoke: True
-      serial: False
-      include-list: *focal_ussuri_include_list
-      exclude-list: *exclude_list
-    focal_wallaby:
-      smoke: True
-      serial: False
-      include-list: *focal_ussuri_include_list
-      exclude-list: *exclude_list
-    jammy_upgrades:
-      smoke: True
-      serial: False
-      include-list: *focal_ussuri_include_list
-      exclude-list: *exclude_list
+      exclude-regex:
+        - "^(octavia_tempest_plugin|manila_tempest_tests|designate_tempest_plugin)\\..*"
   force_deploy:
-    - xenial-queens
     - bionic-queens
+    - bionic-rocky
+    - bionic-stein
+    - bionic-train
     - bionic-ussuri
+    - kinetic-zed
     - lunar-antelope
-    - mantic-bobcat
-    - noble-caracal
 target_deploy_status:
   ceilometer:
     workload-status: blocked
