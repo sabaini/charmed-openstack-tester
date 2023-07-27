@@ -4,3 +4,15 @@ variables:
     TEST_FIP_RANGE: '{{ TEST_FIP_RANGE }}'
     TEST_NAME_SERVER: '{{ TEST_NAME_SERVER }}'
     TEST_SWIFT_IP: '{{ TEST_SWIFT_IP }}'
+    
+applications:
+  ceph-fs:
+    options:
+      source: '{{ TEST_CEPH_SOURCE }}'
+  ceph-mon:
+    options:
+      source: '{{ TEST_CEPH_SOURCE }}'
+  ceph-osd:
+    options:
+      source: '{{ TEST_CEPH_SOURCE }}'
+
