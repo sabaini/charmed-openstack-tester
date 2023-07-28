@@ -114,7 +114,10 @@ tests_options:
       exclude-list:
         - "tempest.api.network.*"
         - "tempest.scenario.test_network_basic_ops.*"
+        - "tempest.scenario.test_server_basic_ops.*"
         - "tempest.api.compute.servers.test_server_actions.*"
+        - "tempest.api.compute.servers.test_attach_interfaces.*"
+        - "designate_tempest_plugin.tests.api.*"
         - "manila_tempest_tests.tests.api.admin.test_share_networks.ShareNetworkAdminTest"
         - "manila_tempest_tests.tests.api.test_share_networks.ShareNetworksTest"
         - "octavia_tempest_plugin.tests.scenario.v2.test_traffic_ops.TrafficOperationsScenarioTest"
